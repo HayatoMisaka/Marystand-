@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MARY STAND Menu</title>
+<meta name="description" content="MARY STAND(下北沢)のメニュー。ハンバーガー、お料理、ドリンク、お酒、スイーツ。日本語 / English">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: one narrow column for phones. Sticky bar holds the JA/EN switch and category tabs.
+   Under each language the other language stays visible in small type, so guests can point at the Japanese name to order. */
+:root {
+  --font-display: "Bricolage Grotesque", "Noto Sans JP", system-ui, sans-serif;
+  --font-body: "Noto Sans JP", system-ui, -apple-system, "Hiragino Sans", sans-serif;
+  --bg: #FFF5E8;
+  --surface: #FFFBF4;
+  --surface2: #FCE7CF;
+  --fg: #12302E;
+  --muted: #566B68;
+  --accent: #D74B12;
+  --accent-text: #B63908;
+  --on-accent: #FFFFFF;
+  --mint: #BFE3DC;
+  --mint-ink: #0F3B37;
+  --line: #EBD3B6;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1F1E; --surface: #14292A; --surface2: #1B3836; --fg: #FFF1DF; --muted: #9FB6B1;
+    --accent: #FF8A50; --accent-text: #FF9B6B; --on-accent: #2A1206;
+    --mint: #2B5853; --mint-ink: #D5F1EC; --line: #2A4744;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1F1E; --surface: #14292A; --surface2: #1B3836; --fg: #FFF1DF; --muted: #9FB6B1;
+  --accent: #FF8A50; --accent-text: #FF9B6B; --on-accent: #2A1206;
+  --mint: #2B5853; --mint-ink: #D5F1EC; --line: #2A4744;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.wrap { max-width: 720px; margin-inline: auto; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); padding-block: 10px 10px; }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+.wm { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; letter-spacing: .02em; }
+.loc { font-size: .72rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.lang { display: flex; border: 1.5px solid var(--fg); border-radius: 999px; overflow: hidden; flex: none; }
+.lang button { background: transparent; border: 0; padding: 6px 14px; font-weight: 700; font-size: .85rem; }
+.lang button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.tabs { display: flex; gap: 8px; overflow-x: auto; margin-top: 10px; padding-bottom: 2px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tabs button { flex: none; background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: .86rem; white-space: nowrap; }
+.tabs button[aria-current="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+/* intro */
+.intro { padding-block: 22px 8px; }
+.intro h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.4rem, 12vw, 3.6rem); line-height: .95; letter-spacing: -.01em; margin: 0 0 8px; text-wrap: balance; }
+.tagline { margin: 0 0 14px; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.chips li { background: var(--mint); color: var(--mint-ink); border-radius: 999px; padding: 4px 12px; font-size: .8rem; font-weight: 700; }
+.search { margin-top: 16px; }
+.search input { width: 100%; font: inherit; color: var(--fg); background: var(--surface); border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.search input::placeholder { color: var(--muted); }
+
+/* categories */
+.cat { padding-top: 36px; scroll-margin-top: calc(120px + env(safe-area-inset-top, 0px)); }
+.ch { display: flex; flex-direction: column; gap: 2px; margin-bottom: 6px; }
+.eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); }
+.ch h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.9rem, 9vw, 2.6rem); line-height: 1; margin: 0; text-wrap: balance; }
+.cnote { color: var(--muted); font-size: .88rem; margin: 8px 0 0; max-width: 60ch; }
+
+.grp { margin-top: 26px; }
+.gh h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; margin: 0; padding-bottom: 6px; position: relative; text-wrap: balance; }
+.gh h3::after { content: ""; position: absolute; left: 0; bottom: 0; width: 48px; height: 3px; background: var(--accent); }
+.gnote { margin: 8px 0 0; font-size: .84rem; color: var(--muted); }
+
+.items { list-style: none; margin: 6px 0 0; padding: 0; }
+.it { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 14px; padding-block: 12px; border-bottom: 1px solid var(--line); }
+.nm { font-weight: 700; font-size: 1.02rem; line-height: 1.35; overflow-wrap: anywhere; }
+.sub { display: block; font-weight: 400; font-size: .8rem; color: var(--muted); margin-top: 1px; }
+.dsc { grid-column: 1; margin: 0; font-size: .87rem; color: var(--muted); }
+.badge { display: inline-block; background: var(--accent); color: var(--on-accent); font-size: .68rem; font-weight: 700; border-radius: 4px; padding: 1px 7px; margin-left: 8px; vertical-align: 2px; letter-spacing: .02em; }
+.pr { grid-column: 2; grid-row: 1 / span 3; text-align: right; display: flex; flex-direction: column; gap: 2px; align-items: flex-end; }
+.pl { font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--font-display); }
+.pl b { font-weight: 700; font-size: 1.02rem; }
+.pl em { font-style: normal; font-family: var(--font-body); font-size: .68rem; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-right: 6px; }
+
+/* sets */
+.seg { display: inline-flex; border: 1.5px solid var(--fg); border-radius: 999px; overflow: hidden; margin-top: 14px; }
+.seg button { background: transparent; border: 0; padding: 7px 18px; font-weight: 700; font-size: .88rem; }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.sets { display: grid; gap: 14px; margin-top: 16px; }
+.set { background: var(--surface2); border-radius: 14px; padding: 16px; }
+.set-h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.set-h h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; margin: 0; }
+.set-p { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; color: var(--accent-text); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.set p { margin: 6px 0 12px; font-size: .9rem; }
+.set ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.set li { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px; font-size: .8rem; }
+
+.none { padding-block: 40px; color: var(--muted); text-align: center; }
+
+footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); font-size: .86rem; color: var(--muted); }
+footer p { margin: 0 0 8px; }
+footer a { color: var(--accent-text); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="bar">
+      <div class="brand"><span class="wm">MARY STAND</span><span class="loc" id="loc"></span></div>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" id="b-ja" data-lang="ja">日本語</button>
+        <button type="button" id="b-en" data-lang="en">English</button>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Menu categories"></nav>
+  </header>
+
+  <div class="intro">
+    <h1 id="h1">MENU</h1>
+    <p class="tagline" id="tagline"></p>
+    <ul class="chips" id="chips"></ul>
+    <div class="search"><input id="q" type="search" autocomplete="off"></div>
+  </div>
+
+  <main id="menu"></main>
+
+  <footer>
+    <p id="addr"></p>
+    <p><a href="https://www.instagram.com/mary_stand_shimokita/" target="_blank" rel="noopener">Instagram @mary_stand_shimokita</a> ・ <a id="maplink" href="https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA%E5%8C%97%E6%B2%A22%E4%B8%81%E7%9B%AE23-11" target="_blank" rel="noopener">Google Maps</a></p>
+  </footer>
+</div>
+
+<script>
+/* ---------- data ---------- */
+// every user-facing string is [日本語, English]
+const HOT = ["ホット", "Hot"], COLD = ["アイス", "Cold"], HALF = ["ハーフ", "Half"], REG = ["レギュラー", "Regular"],
+  SINGLE = ["1人前", "Single"], DOUBLE = ["ダブル", "Double"], GLASS = ["グラス", "Glass"], DECANTER = ["デキャンタ", "Decanter"],
+  BOTTLE = ["ボトル", "Bottle"], HBOTTLE = ["ハーフボトル", "Half bottle"], FBOTTLE = ["フルボトル", "Full bottle"];
+const HC = (h, c) => [[HOT, h], [COLD, c]];
+// item: [ja, en, price, jaDesc, enDesc, badge]
+const I = (ja, en, p, jd, ed, b) => ({ ja, en, p: typeof p === "number" ? [[null, p]] : p, jd, ed, b });
+
+const CATS = [
+  { id: "burgers", n: ["ハンバーガー", "Hamburgers"],
+    note: ["すべてのハンバーガーにフライドポテトが付きます。パティ、トマト、レタス、オニオン、ピクルス、マヨネーズが入っており、ご要望で抜くこともできます。", "Every burger comes with fries. Each one has a beef patty, tomato, lettuce, onion, pickles and mayonnaise. Anything can be left out on request."],
+    groups: [
+      { n: ["バーガー", "Burgers"], items: [
+        I("ベーシックバーガー", "Basic Burger", 1650, "国産牛100%。MARYの自慢のハンバーガー", "100% Japanese beef. Mary's signature burger."),
+        I("チーズバーガー", "Cheeseburger", 1750, "シンプルなチェダーチーズハンバーガー", "A simple cheddar cheeseburger."),
+        I("ダブルパティチーズバーガー", "Double Patty Cheeseburger", 2530, "パティとチーズがダブル", "Two patties, double the cheese.", ["オススメ", "Recommended"]),
+        I("アボカドチーズバーガー", "Avocado Cheeseburger", 1950, "クリーミーなアボカドとチーズ", "Creamy avocado and cheese.", ["人気No.1", "Most popular"]),
+        I("濃厚ダブルチェダーバーガー", "Double Cheddar Cheeseburger", 1850, "チェダーチーズがダブル", "Double cheddar.", ["迷ったらこれ", "Can't decide? Get this"]),
+        I("スパイシーチリバーガー", "Spicy Chili Burger", 1850, "11種類のスパイスを使った自家製スパイスソース", "Homemade spicy sauce made with 11 spices."),
+        I("照り焼きエッグバーガー", "Teriyaki Egg Burger", 1850, "甘じょっぱい照り焼きソースと卵のまろやかさ", "Sweet and savory teriyaki sauce with a soft egg."),
+        I("チーズエッグバーガー", "Cheese and Egg Burger", 1880, "卵とチーズの定番の組み合わせ", "Egg and cheese, a classic pair."),
+        I("ベーコンチーズバーガー", "Bacon Cheeseburger", 2050, "自家製ベーコンを使った自慢の一品", "Made with our homemade bacon."),
+        I("スパイシーベーコンチーズバーガー", "Spicy Bacon Cheeseburger", 2050, "自家製スパイスソースと自家製ベーコン", "Homemade spicy sauce and homemade bacon."),
+        I("ハッシュドポテトチェダーバーガー", "Hashed Potato Cheddar Burger", 1880, "サクサクのハッシュドポテトが病みつきに", "Crispy hashed potato. Addictive."),
+        I("クアトロチーズバーガー", "Quattro Cheeseburger", 1950, "4種類のチーズを使用。チーズ好きは是非", "Four kinds of cheese. For cheese lovers."),
+        I("グリルドパインバーガー", "Grilled Pineapple Burger", 1850, "グリルしたパインとクリームチーズ", "Grilled pineapple and cream cheese."),
+        I("ローストビーフ オニオンマヨバーガー", "Roast Beef Burger", 2450, "自家製ローストビーフに、ツンと爽やかな辛み", "Homemade roast beef with a sharp, fresh onion mayo."),
+        I("トリプルパティチーズバーガー", "Triple Patty Cheeseburger", 3300, "アゴが外れないようにご注意ください", "Three patties. Mind your jaw.")
+      ] },
+      { n: ["トッピング", "Toppings"], items: [
+        I("チーズ / エッグ / グリルドパイン / クリームチーズ", "Cheese / Egg / Grilled pineapple / Cream cheese", 280),
+        I("アボカド / 自家製ベーコン / ハッシュドポテト / モッツァレラ", "Avocado / Homemade bacon / Hashed potato / Mozzarella", 380),
+        I("ピクルス / オニオン", "Pickles / Onion", 100),
+        I("パティ追加", "Extra patty", 750)
+      ] }
+    ] },
+
+  { id: "sets", n: ["セット", "Sets"], special: true },
+
+  { id: "plates", n: ["お料理", "Plates"], groups: [
+    { n: ["ミートボール", "Meatballs"], note: ["メアリー自慢のミートボール", "Mary's pride and joy."], items: [
+      I("デミグラスミートボール", "Demi-glace Meatballs", [[SINGLE, 1600], [DOUBLE, 2200]], "", "Meatballs in rich demi-glace sauce."),
+      I("トマトミートボール", "Tomato Meatballs", [[SINGLE, 1600], [DOUBLE, 2200]], "", "Meatballs in tomato sauce."),
+      I("サワークリームミートボール", "Sour Cream Meatballs", [[SINGLE, 1650], [DOUBLE, 2250]], "", "Meatballs in sour cream sauce."),
+      I("バゲット / ライス", "Baguette or Rice", 250)
+    ] },
+    { n: ["おつまみ", "Otsumami (small plates)"], note: ["お酒に合う一品", "Small plates that go well with drinks."], items: [
+      I("ワカモレ チップス", "Guacamole Chips", 850),
+      I("シナモン蜂蜜クリームチーズ", "Cinnamon Honey Cream Cheese", 850, "", "Cream cheese with cinnamon and honey."),
+      I("チリコンカン", "Chili con Carne", 950),
+      I("スモークサーモンとオリーブ", "Smoked Salmon and Olives", 950),
+      I("海老とキノコの濃厚ホワイトアヒージョ", "White Ajillo with Shrimp and Mushrooms", 1180, "", "Shrimp and mushrooms in a rich, creamy garlic ajillo."),
+      I("ローストビーフとマッシュポテト", "Roast Beef and Mashed Potatoes", 1150),
+      I("自家製ピクルス", "Homemade Pickles", 880),
+      I("アボカドとオニオンスライス", "Avocado and Onion Slices", 800)
+    ] },
+    { n: ["フライドフード", "Fried Food"], items: [
+      I("フライドポテト(塩味)", "French Fries (salted)", 690),
+      I("フライドポテト(サワークリームとスイートチリ)", "Fries with Sour Cream and Sweet Chili", 780),
+      I("チリチーズポテト", "Chili Cheese Potatoes", 980),
+      I("アンチョビポテト", "Anchovy Fries", 880),
+      I("オニオンフライ", "Fried Onion", 980),
+      I("チキンナゲット 5個", "Chicken Nuggets (5 pcs)", 650),
+      I("ハッシュドポテト 2個", "Hashed Potatoes (2 pcs)", 650)
+    ] },
+    { n: ["ソーセージ", "Sausages"], note: ["丹精込めて作った自家製ソーセージ(2本)", "Our homemade sausages, 2 per order."], items: [
+      I("自家製ソーセージ", "Homemade Sausages", 660),
+      I("自家製パクチーソーセージ", "Homemade Coriander Sausages", 720),
+      I("自家製カレーソーセージ", "Homemade Curry Sausages", 720)
+    ] },
+    { n: ["サラダ", "Salads"], items: [
+      I("シンプルサラダ", "Simple Salad", [[HALF, 700], [REG, 1300]]),
+      I("モッツァレラ ブッラータと季節のフルーツ", "Mozzarella Burrata Caprese with Seasonal Fruit", [[HALF, 900], [REG, 1600]]),
+      I("生ハムのシーザーサラダ", "Caesar Salad with Prosciutto", [[HALF, 850], [REG, 1500]]),
+      I("ローストビーフのシーザーサラダ", "Roast Beef Caesar Salad", [[HALF, 900], [REG, 1600]]),
+      I("タンドリーチキンのサラダ", "Tandoori Chicken Salad", [[HALF, 900], [REG, 1600]])
+    ] },
+    { n: ["パスタ&ピザ", "Pasta & Pizza"], items: [
+      I("牛挽肉のボロネーゼ", "Minced Beef Bolognese", 1690),
+      I("きのこチキン クリームパスタ", "Chicken and Mushroom Cream Pasta", 1690),
+      I("海老とブロッコリーのジェノベーゼ パスタ", "Shrimp and Broccoli Pesto Genovese", 1690),
+      I("マルゲリータ", "Margherita Pizza", 1590),
+      I("チリミートとキノコのピザ", "Chili Meat and Mushroom Pizza", 1690),
+      I("照り焼きチキン ピザ", "Teriyaki Chicken Pizza", 1690)
+    ] }
+  ] },
+
+  { id: "drinks", n: ["ドリンク", "Drinks"], groups: [
+    { n: ["コーヒー&ラテ", "Coffee & Latte"], items: [
+      I("コーヒー", "Coffee", HC(650, 650)),
+      I("ハンドドリップコーヒー", "Pour-over Coffee", [[HOT, 750]]),
+      I("カフェラテ", "Caffè Latte", HC(680, 680)),
+      I("キャラメルラテ", "Caramel Macchiato", HC(720, 720)),
+      I("カフェモカ", "Café Mocha", HC(720, 720)),
+      I("ヘーゼルナッツラテ", "Hazelnut Latte", HC(720, 720)),
+      I("ココナッツラテ", "Coconut Latte", HC(720, 720)),
+      I("シナモンカプチーノ", "Cinnamon Cappuccino", HC(720, 720))
+    ] },
+    { n: ["ティー", "Tea"], items: [
+      I("アールグレイ", "Earl Grey Tea", [[HOT, 720], [COLD, 650]]),
+      I("ミルクティー", "Tea with Milk", [[HOT, 780], [COLD, 700]]),
+      I("ジャスミン", "Jasmine Tea", [[HOT, 750], [COLD, 680]]),
+      I("カモミール", "Chamomile Tea", [[HOT, 780]]),
+      I("ペパーミント", "Peppermint Tea", [[HOT, 780]]),
+      I("ローズヒップ", "Rosehip & Hibiscus Tea", [[HOT, 780]]),
+      I("柚茶", "Yuzu Tea", HC(680, 680), "", "Citrus tea made with Japanese yuzu."),
+      I("烏龍茶", "Oolong Tea", HC(600, 600))
+    ] },
+    { n: ["ソフトドリンク", "Soft Drinks"], items: [
+      I("自家製コーラ(ソーダ or ミルク)", "Homemade Cola (soda or milk)", 650),
+      I("自家製ジンジャーエール", "Homemade Ginger Ale", 650),
+      I("自家製レモンスカッシュ", "Homemade Lemon Squash", 680),
+      I("自家製レモネード", "Homemade Lemonade", HC(680, 680)),
+      I("A&W ルートビア", "A&W Root Beer", 700),
+      I("グレープフルーツジュース", "Grapefruit Juice", 600),
+      I("オレンジジュース", "Orange Juice", 600),
+      I("マンゴージュース", "Mango Juice", 680),
+      I("グァバジュース", "Guava Juice", 680),
+      I("クランベリージュース", "Cranberry Juice", 680),
+      I("トマトジュース", "Tomato Juice", 680)
+    ] },
+    { n: ["アンユージュアル", "Unusual"], note: ["ちょっと変わったドリンク。すべて800円", "A few unusual ones. All ¥800."], items: [
+      I("黒蜜抹茶ミルク", "Black Sugar Matcha Milk", HC(800, 800), "", "Matcha milk sweetened with Japanese black sugar syrup."),
+      I("黒ゴマきな粉ミルク", "Black Sesame Kinako Milk", HC(800, 800), "", "Milk with black sesame and kinako (roasted soybean flour)."),
+      I("ミントティーソーダ", "Mint Tea Soda", 800),
+      I("エスプレッソ トニック", "Espresso Tonic", 800),
+      I("ピクルス酢ソーダ", "Pickle Soda", 800, "", "Soda made with pickle vinegar."),
+      I("ハニーレモンジンジャー", "Honey Lemon Ginger", HC(800, 800))
+    ] }
+  ] },
+
+  { id: "alcohol", n: ["お酒", "Alcohol"], groups: [
+    { n: ["ビール", "Beer"], items: [
+      I("ハートランド 生ビール", "Heartland Draft Beer", 750),
+      I("コロナ", "Corona Extra", 800),
+      I("ギネス スタウト", "Guinness Extra Stout", 850),
+      I("ヒューガルデン ホワイト", "Hoegaarden White", 950),
+      I("ブリュードッグ パンク IPA", "BrewDog Punk IPA", 950)
+    ] },
+    { n: ["ハイボール", "Highball"], note: ["ストレート、ロック、水割りもできます", "Any whisky can also be served straight, on the rocks or with water."], items: [
+      I("サントリー 角", "Suntory Kaku", 650),
+      I("I.W. ハーパー", "I.W. Harper", 850),
+      I("ウッドフォードリザーブ", "Woodford Reserve", 1000),
+      I("デュワーズ 12年", "Dewar's 12 Year", 900),
+      I("グレンリベット 12年", "The Glenlivet 12 Year", 1300),
+      I("アードベッグ 10年", "Ardbeg 10 Year", 1350),
+      I("サントリー 白州", "Suntory Hakushu", 1600),
+      I("サントリー 山崎", "Suntory Yamazaki", 1600)
+    ] },
+    { n: ["ワイン&スパークリング", "Wine & Sparkling"], items: [
+      I("ガロ ファミリー カベルネ(赤)/ シャルドネ(白)", "Gallo Family Cabernet (red) / Chardonnay (white)", [[GLASS, 800], [DECANTER, 2200], [BOTTLE, 4000]]),
+      I("ロジャー・グラート カヴァ・ゴールド ブリュット", "Roger Goulart Cava Gold Brut", [[HBOTTLE, 3000], [FBOTTLE, 5500]])
+    ] },
+    { n: ["ビアカクテル", "Beer Cocktails"], note: ["すべて900円", "All ¥900."], items: [
+      I("レッドアイ", "Red Eye", 900, "", "Beer and tomato juice."),
+      I("シャンディガフ", "Shandygaff", 900, "", "Beer and ginger ale."),
+      I("自家製コーラビア", "Homemade Cola Syrup and Beer", 900),
+      I("レモンビア", "Homemade Lemon Syrup and Beer", 900)
+    ] },
+    { n: ["カクテル", "Cocktails"], note: ["すべて950円", "All ¥950."], items: [
+      I("つめた〜いジンとトニック", "Gin and Tonic", 950),
+      I("スウェーデンのウオッカと自家製ジンジャエール", "Moscow Mule", 950, "", "Swedish vodka with homemade ginger ale."),
+      I("3年物のラムと自家製コーラ", "Rum and Homemade Cola", 950, "", "Three-year-aged rum with homemade cola."),
+      I("すっきりテキーラとトマトジュース 少しタバスコ", "Tequila and Tomato Juice", 950, "", "Clean tequila and tomato juice with a little Tabasco."),
+      I("ピーチのお酒とアールグレイ", "Peach Liqueur and Earl Grey", 950),
+      I("カシスのお酒とオレンジジュース", "Cassis Orange", 950),
+      I("上海レモネード", "Shanghai Lemonade", 950),
+      I("大人のコーヒー牛乳", "Kahlúa Milk", 950, "", "Coffee liqueur with milk."),
+      I("大人のココナッツミルク", "Malibu Milk", 950, "", "Coconut rum with milk.")
+    ] },
+    { n: ["時間のかかるカクテル", "This Cocktail Takes Time"], note: ["作るのに少しお時間をいただきます。すべて1,200円", "Made with care, so it takes a little time. All ¥1,200."], items: [
+      I("ココナッツパイン シェイク", "Coconut Pineapple Shake", 1200),
+      I("キャラメルバナナ シェイク", "Caramel Banana Shake", 1200),
+      I("ウィスキー アフォガード", "Whiskey Affogato", 1200),
+      I("モヒート", "Mojito", 1200),
+      I("ミントジュレップ", "Mint Julep", 1200)
+    ] },
+    { n: ["焼酎", "Shochu"], note: ["ロック / 水割り / お湯割り / ソーダ割り", "Shochu is a Japanese distilled spirit. Serve it on the rocks, with water, with hot water or with soda."], items: [
+      I("白霧島 芋", "Shirokirishima (sweet potato)", 700),
+      I("中々 麦", "Nakanaka (barley)", 800)
+    ] },
+    { n: ["あらごしシリーズ(フルーツのお酒)", "Fruit Liqueur"], note: ["人気のあらごしシリーズ。ロック / お湯割り / ソーダ割り。すべて900円", "The popular Aragoshi series of fruit liqueurs. On the rocks, with hot water or with soda. All ¥900."], items: [
+      I("あらごし うめ", "Aragoshi Plum", 900),
+      I("あらごし りんご", "Aragoshi Apple", 900),
+      I("あらごし もも", "Aragoshi Peach", 900),
+      I("あらごし ゆず", "Aragoshi Yuzu", 900)
+    ] },
+    { n: ["サワー&チューハイ", "Sours & Chuhai"], note: ["チューハイは焼酎のソーダ割りです", "Chuhai is shochu with soda or tea."], items: [
+      I("ピクル酢サワー", "Pickle Vinegar Sour", 750),
+      I("レモンサワー", "Lemon Sour", 750),
+      I("キウイサワー", "Kiwi Sour", 750),
+      I("みかんサワー", "Mandarin Sour", 750),
+      I("ライムサワー", "Lime Sour", 750),
+      I("レッドグレープフルーツサワー", "Red Grapefruit Sour", 750),
+      I("ウーロン割り", "Shochu and Oolong Tea", 700),
+      I("紅茶割り", "Shochu and Earl Grey", 700),
+      I("コーヒー割り", "Shochu and Coffee", 700),
+      I("トマトジュース割り", "Shochu and Tomato Juice", 700)
+    ] }
+  ] },
+
+  { id: "sweets", n: ["スイーツ", "Sweets"], groups: [
+    { n: ["ケーキ", "Cake"], note: ["ケーキとお飲み物を一緒に注文すると200円OFF(アルコールもOK)", "Order cake with a drink and get ¥200 off. Alcohol counts too."], items: [
+      I("Mary's 本日のケーキ", "Mary's Cake of the Day", 850)
+    ] },
+    { n: ["アイスクリーム", "Ice Cream"], note: ["お好きな味をお選びください。アイスクリームと飲み物を一緒に注文すると100円OFF(アルコールもOK)", "Pick your flavor. Order ice cream with a drink and get ¥100 off. Alcohol counts too."], items: [
+      I("バニラ / チョコレート / ストロベリー / ピスタチオ", "Vanilla / Chocolate / Strawberry / Pistachio", 600)
+    ] },
+    { n: ["アイスクリームソーダ&フロート", "Ice Cream Soda & Float"], note: ["すべて850円", "All ¥850."], items: [
+      I("メロンアイスクリームソーダ", "Melon Ice Cream Soda", 850),
+      I("ブルーハワイアイスクリームソーダ", "Blue Hawaii Ice Cream Soda", 850),
+      I("ピーチアイスクリームソーダ", "Peach Ice Cream Soda", 850),
+      I("自家製コーラアイスクリームソーダ", "Homemade Cola Ice Cream Soda", 850),
+      I("コーヒーフロート", "Coffee Ice Cream Float", 850),
+      I("抹茶フロート", "Matcha Ice Cream Float", 850),
+      I("紅茶フロート", "Tea Ice Cream Float", 850),
+      I("マンゴーフロート", "Mango Ice Cream Float", 850)
+    ] },
+    { n: ["シェイク", "Shakes"], note: ["すべて950円", "All ¥950."], items: [
+      I("ロータス・キャラメルシェイク", "Lotus Caramel Shake", 950),
+      I("オレオ・チョコシェイク", "Oreo Chocolate Shake", 950),
+      I("黒蜜・抹茶シェイク", "Brown Sugar Syrup Matcha Shake", 950)
+    ] }
+  ] }
+];
+
+const DRINKS_LUNCH = [
+  ["コーヒー(ホット/アイス)", "Coffee (hot / iced)"], ["紅茶(ホット/アイス)", "Earl Grey tea (hot / iced)"],
+  ["烏龍茶(ホット/アイス)", "Oolong tea (hot / iced)"], ["柚子茶(ホット/アイス)", "Yuzu tea (hot / iced)"],
+  ["クランベリージュース", "Cranberry juice"], ["自家製コーラ(ソーダ or ミルク)", "Homemade cola (soda or milk)"],
+  ["自家製ジンジャーエール", "Homemade ginger ale"], ["オレンジジュース", "Orange juice"],
+  ["グレープフルーツジュース", "Grapefruit juice"], ["グァバジュース", "Guava juice"], ["マンゴージュース", "Mango juice"]
+];
+const DRINKS_DINNER = DRINKS_LUNCH.slice(0, 7).concat([
+  ["自家製レモンスカッシュ", "Homemade lemon squash"], ["自家製レモネード", "Homemade lemonade"]
+], DRINKS_LUNCH.slice(7));
+const SODAS = [["メロンアイスクリームソーダ", "Melon ice cream soda"], ["ブルーハワイアイスクリームソーダ", "Blue Hawaii ice cream soda"], ["ピーチアイスクリームソーダ", "Peach ice cream soda"], ["自家製コーラアイスクリームソーダ", "Homemade cola ice cream soda"]];
+
+const SETS = {
+  lunch: [
+    { t: ["ランチセット", "Lunch Set"], p: "+¥450", d: ["お好きなハンバーガーにプラス450円で、サラダとドリンクが付きます。ドリンクをラージにするには+200円です。", "Add to any burger: a salad and a drink. Make the drink large for +¥200."], c: DRINKS_LUNCH },
+    { t: ["アルコールランチセット", "Alcohol Lunch Set"], p: "+¥750", d: ["お好きなハンバーガーにプラス750円で、サラダとアルコールが付きます。ドリンクをラージにするには+300円です。", "Add to any burger: a salad and an alcoholic drink. Make the drink large for +¥300."], c: [["生ビール", "Draft beer"], ["ハイボール", "Highball"], ["グラスワイン 赤 or 白", "Glass of wine, red or white"]] }
+  ],
+  dinner: [
+    { t: ["バーガードリンクセット", "Burger Drink Set"], p: "¥390", d: ["ハンバーガーにドリンクを付ける場合、各390円です(ルートビアは450円でラージ不可)。+200円でラージに変更できます。", "Add a drink to your burger for ¥390 each (root beer is ¥450, regular size only). Make it large for +¥200."], c: DRINKS_DINNER.concat([["A&W ルートビア(450円)", "A&W root beer (¥450)"]]) },
+    { t: ["アイスクリームソーダセット", "Ice Cream Soda Set"], p: "¥650", d: ["ハンバーガーに付けるアイスクリームソーダのセットです。", "An ice cream soda to go with your burger."], c: SODAS }
+  ]
+};
+
+const UI = {
+  tagline: ["裏路地のハンバーガーレストラン", "A hamburger restaurant on a back street in Shimokitazawa"],
+  chips: [["下北沢駅西口から徒歩30秒", "30 sec from Shimokitazawa Stn. West Exit"], ["ペットOK", "Pets welcome"], ["2020年OPEN", "Open since 2020"]],
+  ph: ["メニューを検索(例: アボカド)", "Search the menu (e.g. avocado)"],
+  loc: ["下北沢", "Shimokitazawa"],
+  none: ["見つかりませんでした。別の言葉でお試しください。", "Nothing found. Try another word."],
+  lunch: ["ランチ", "Lunch"], dinner: ["ディナー", "Dinner"],
+  setnote: ["ランチとディナーでセットの内容が異なります。", "Sets differ between lunch and dinner."],
+  addr: ["東京都世田谷区北沢2丁目23-11 ・ 井の頭線 下北沢駅西口から徒歩30秒", "2-23-11 Kitazawa, Setagaya, Tokyo ・ 30 sec walk from Shimokitazawa Station (Inokashira Line), West Exit"]
+};
+
+/* ---------- state ---------- */
+let lang = "ja", mode = "lunch", query = "";
+try { const s = localStorage.getItem("ms-lang"); if (s === "ja" || s === "en") lang = s; else if (!(navigator.language || "").toLowerCase().startsWith("ja")) lang = "en"; } catch (e) {}
+const T = a => a[lang === "ja" ? 0 : 1];
+const O = a => a[lang === "ja" ? 1 : 0];
+const yen = v => typeof v === "number" ? "¥" + v.toLocaleString("en-US") : v;
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/* ---------- render ---------- */
+function itemHTML(it) {
+  const name = lang === "ja" ? it.ja : it.en, other = lang === "ja" ? it.en : it.ja;
+  const desc = lang === "ja" ? it.jd : it.ed;
+  const badge = it.b ? `<span class="badge">${esc(T(it.b))}</span>` : "";
+  const prices = it.p.map(([l, v]) => `<span class="pl">${l ? `<em>${esc(T(l))}</em>` : ""}<b>${yen(v)}</b></span>`).join("");
+  return `<li class="it"><div class="nm">${esc(name)}${badge}<span class="sub">${esc(other)}</span></div>${desc ? `<p class="dsc">${esc(desc)}</p>` : ""}<div class="pr">${prices}</div></li>`;
+}
+const match = it => !query || [it.ja, it.en, it.jd || "", it.ed || ""].join(" ").toLowerCase().includes(query);
+
+function setsHTML(c) {
+  const cards = SETS[mode].map(s => `<article class="set"><div class="set-h"><h3>${esc(T(s.t))}</h3><span class="set-p">${esc(s.p)}</span></div><p>${esc(T(s.d))}</p><ul>${s.c.map(x => `<li>${esc(T(x))}</li>`).join("")}</ul></article>`).join("");
+  return `<section class="cat" id="${c.id}"><header class="ch"><span class="eyebrow">${esc(O(c.n))}</span><h2>${esc(T(c.n))}</h2><p class="cnote">${esc(T(UI.setnote))}</p></header>
+    <div class="seg" role="group"><button type="button" data-mode="lunch" aria-pressed="${mode === "lunch"}">${esc(T(UI.lunch))}</button><button type="button" data-mode="dinner" aria-pressed="${mode === "dinner"}">${esc(T(UI.dinner))}</button></div>
+    <div class="sets">${cards}</div></section>`;
+}
+
+function render() {
+  let html = "", found = false;
+  for (const c of CATS) {
+    if (c.special) { if (!query) { html += setsHTML(c); found = true; } continue; }
+    let inner = "";
+    for (const g of c.groups) {
+      const items = g.items.filter(match);
+      if (!items.length) continue;
+      inner += `<section class="grp"><div class="gh"><h3>${esc(T(g.n))}</h3>${g.note ? `<p class="gnote">${esc(T(g.note))}</p>` : ""}</div><ul class="items">${items.map(itemHTML).join("")}</ul></section>`;
+    }
+    if (inner) {
+      found = true;
+      html += `<section class="cat" id="${c.id}"><header class="ch"><span class="eyebrow">${esc(O(c.n))}</span><h2>${esc(T(c.n))}</h2>${c.note && !query ? `<p class="cnote">${esc(T(c.note))}</p>` : ""}</header>${inner}</section>`;
+    }
+  }
+  document.getElementById("menu").innerHTML = found ? html : `<p class="none">${esc(T(UI.none))}</p>`;
+  spy();
+}
+
+function renderChrome() {
+  document.documentElement.lang = lang;
+  document.getElementById("b-ja").setAttribute("aria-pressed", lang === "ja");
+  document.getElementById("b-en").setAttribute("aria-pressed", lang === "en");
+  document.getElementById("loc").textContent = T(UI.loc);
+  document.getElementById("tagline").textContent = T(UI.tagline);
+  document.getElementById("chips").innerHTML = UI.chips.map(x => `<li>${esc(T(x))}</li>`).join("");
+  document.getElementById("q").placeholder = T(UI.ph);
+  document.getElementById("q").setAttribute("aria-label", T(UI.ph));
+  document.getElementById("addr").textContent = T(UI.addr);
+  document.getElementById("tabs").innerHTML = CATS.map(c => `<button type="button" data-go="${c.id}">${esc(T(c.n))}</button>`).join("");
+  spy();
+}
+
+/* ---------- interaction ---------- */
+function spy() {
+  const secs = [...document.querySelectorAll(".cat")];
+  const line = (document.querySelector(".top")?.offsetHeight || 100) + 40;
+  let cur = secs.length ? secs[0].id : "";
+  for (const s of secs) if (s.getBoundingClientRect().top <= line) cur = s.id;
+  document.querySelectorAll("#tabs button").forEach(b => {
+    const on = b.dataset.go === cur;
+    if (on) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+    if (on && b.dataset.seen !== cur) { b.dataset.seen = cur; b.scrollIntoView({ block: "nearest", inline: "center" }); }
+  });
+}
+let tick = false;
+addEventListener("scroll", () => { if (!tick) { tick = true; requestAnimationFrame(() => { tick = false; spy(); }); } }, { passive: true });
+
+document.addEventListener("click", e => {
+  const l = e.target.closest("[data-lang]");
+  if (l) { lang = l.dataset.lang; try { localStorage.setItem("ms-lang", lang); } catch (x) {} renderChrome(); render(); return; }
+  const m = e.target.closest("[data-mode]");
+  if (m) { mode = m.dataset.mode; render(); return; }
+  const g = e.target.closest("[data-go]");
+  if (g) { const el = document.getElementById(g.dataset.go); if (el) el.scrollIntoView({ block: "start" }); }
+});
+document.getElementById("q").addEventListener("input", e => { query = e.target.value.trim().toLowerCase(); render(); });
+
+renderChrome();
+render();
+</script>
+</body>
+</html>
